@@ -4,18 +4,29 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
+import "./index.css";
+import Layout from "./components/Layout";
+import Home from "./pages/Home.jsx";
+import Cart from "./pages/Cart.jsx";
+import Login from "./pages/Login.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<h1>This is root route</h1>}></Route>
+    <>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="/cart" index element={<Cart />} />
+        <Route path="/login" index element={<Login />} />
+      </Route>
+    </>
   )
 );
 
 function App() {
   return (
-    <div>
+    <>
       <RouterProvider router={router} />
-    </div>
+    </>
   );
 }
 
