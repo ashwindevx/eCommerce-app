@@ -1,29 +1,24 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../features/cart-slice";
+import { fetchAllProducts } from "../features/products-slice";
 
 function Home() {
-  const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState([]);
+  // returns latest data
+  const state = useSelector((state) => state.products);
+  const { value: products, loading } = state ?? {};
 
   const dispatch = useDispatch();
 
-  async function fetchProducts() {
-    const response = await fetch("https://fakestoreapi.com/products");
-    const result = await response.json();
-    setProducts(result);
-    setLoading(false);
+  if (!products?.length) {
+    dispatch(fetchAllProducts());
   }
-
-  useEffect(() => {
-    fetchProducts();
-  });
-
-  if (loading) return <div>Loading...</div>;
 
   function addCartHandler(product) {
     dispatch(addToCart({ product, quantity: 1 }));
   }
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="max-w-7xl px-4 mx-auto">
