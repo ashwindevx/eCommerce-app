@@ -19,6 +19,7 @@ const Header = () => {
 
   const [selectedCategory, setSelectedCategory] = useState("");
 
+  // set default category to "all" if no category is selected
   useEffect(() => {
     setSelectedCategory(category ? category : "all");
   }, [category]);
@@ -27,6 +28,7 @@ const Header = () => {
     dispatch(fetchAllCategories());
   }
 
+  // url param update fn
   const handleCategoryChange = (e) => {
     const { value } = e.target;
     navigate(value === "all" ? "/" : `/?category=${value}`);

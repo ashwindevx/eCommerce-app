@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 
@@ -12,7 +11,7 @@ function Home() {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
 
-  const category = searchParams.get("category");
+  const category = searchParams.get("category"); // read param value
 
   if (!products?.length) {
     dispatch(fetchAllProducts());
@@ -22,6 +21,7 @@ function Home() {
     dispatch(addToCart({ product, quantity: 1 }));
   }
 
+  // filter based on category value, default is "all" (show every product)
   let filteredProducts =
     category && category !== "all"
       ? products.filter((prod) => prod.category === category)
