@@ -1,22 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchAllProducts = createAsyncThunk(
-  "products/fetchAll",
+  "products/fetchProducts",
   async () => {
     const response = await fetch("https://fakestoreapi.com/products");
     return await response.json();
   }
 );
 
-const initialState = {
-  value: [],
-  loading: false,
-};
-
 const productsSlice = createSlice({
   name: "products",
-  initialState,
-  reducers: {},
+  initialState: {
+    value: [],
+    loading: false,
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchAllProducts.pending, (state) => {
       state.loading = true;
