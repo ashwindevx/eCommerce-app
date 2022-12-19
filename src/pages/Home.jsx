@@ -11,7 +11,9 @@ function Home() {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
 
-  const category = searchParams.get("category"); // read param value
+  // read param value
+  const category = searchParams.get("category");
+  const searchTerm = searchParams.get("searchterm");
 
   if (!products?.length) {
     dispatch(fetchAllProducts());
@@ -26,6 +28,12 @@ function Home() {
     category && category !== "all"
       ? products.filter((prod) => prod.category === category)
       : products;
+
+  filteredProducts = searchTerm
+    ? filteredProducts.filter((prod) =>
+        prod.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : filteredProducts;
 
   if (loading) return <div>Loading...</div>;
 
@@ -48,7 +56,7 @@ function Home() {
                 </div>
                 <div className="px-5 pb-5">
                   <a href="#">
-                    <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                    <h5 className="text-xl font-semibold tracking-tight text-gray-900">
                       {title}
                     </h5>
                   </a>
@@ -109,7 +117,7 @@ function Home() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-3xl font-bold text-gray-900">
-                      $599
+                      ${price}
                     </span>
                     <button
                       className="text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"

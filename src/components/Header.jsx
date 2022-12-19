@@ -16,8 +16,10 @@ const Header = () => {
   const categories = useSelector((state) => state.categories?.value);
   const dispatch = useDispatch();
   const category = searchParams.get("category"); // getting category from url param
+  const searchTerm = searchParams.get("searchterm");
 
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchText, setSearchText] = useState("");
 
   // set default category to "all" if no category is selected
   useEffect(() => {
@@ -33,6 +35,26 @@ const Header = () => {
     const { value } = e.target;
     navigate(value === "all" ? "/" : `/?category=${value}`);
   };
+
+  const handleSearchChange = (event) => {
+    const { value } = event.target;
+    setSearchText(value);
+  };
+
+  useEffect(() => {
+    handleSearchChange(event);
+    if (searchText) {
+      navigate(
+        selectedCategory === "all"
+          ? `?searchterm=${searchText}`
+          : `/?category=${selectedCategory}&searchterm=${searchText}`
+      );
+    } else {
+      navigate(
+        selectedCategory === "all" ? `/` : `/?category=${selectedCategory}`
+      );
+    }
+  }, [searchText]);
 
   return (
     <div className="w-full h-fit py-4 border-b border-teal-100">
@@ -51,11 +73,12 @@ const Header = () => {
             <option defaultValue="FR">men's clothing</option>
             <option defaultValue="DE">women's clothing</option>
           </select>
-          {/* <input
+          <input
             type="search"
             className="block w-full px-4 py-2 text-teal-700 bg-white border rounded-md focus:border-teal-400 focus:ring-teal-300 focus:outline-none focus:ring focus:ring-opacity-40"
             placeholder="Search..."
-          /> */}
+            onChange={(event) => handleSearchChange(event)}
+          />
           <button
             type="submit"
             className="px-4 text-white bg-teal-600 border-l rounded"
