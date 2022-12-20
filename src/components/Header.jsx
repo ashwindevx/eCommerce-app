@@ -16,7 +16,7 @@ const Header = () => {
   const categories = useSelector((state) => state.categories?.value);
   const dispatch = useDispatch();
   const category = searchParams.get("category"); // getting category from url param
-  const searchTerm = searchParams.get("searchterm");
+  // const searchTerm = searchParams.get("searchterm");
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchText, setSearchText] = useState("");
@@ -36,13 +36,8 @@ const Header = () => {
     navigate(value === "all" ? "/" : `/?category=${value}`);
   };
 
-  const handleSearchChange = (event) => {
-    const { value } = event.target;
-    setSearchText(value);
-  };
-
-  useEffect(() => {
-    handleSearchChange(event);
+  function handleSearchChange(searchText) {
+    console.log(searchText);
     if (searchText) {
       navigate(
         selectedCategory === "all"
@@ -54,18 +49,33 @@ const Header = () => {
         selectedCategory === "all" ? `/` : `/?category=${selectedCategory}`
       );
     }
-  }, [searchText]);
+  }
+
+  function navigateToCart() {
+    navigate("/cart");
+  }
 
   return (
     <div className="w-full h-fit py-4 border-b border-teal-100">
       <div className="max-w-7xl mx-auto px-4 text-black flex justify-between items-center">
-        <div className="text-xl font-bold">eCommerce App</div>
-        <form className="flex">
+        <div
+          className="text-xl font-bold cursor-pointer"
+          onClick={() => navigate("/")}
+        >
+          eCommerce App
+        </div>
+        <form className="flex" onSubmit={(e) => e.preventDefault()}>
+          <input
+            type="search"
+            className="block w-96 px-4 py-2 text-teal-700 bg-white border rounded-md focus:border-teal-400 focus:ring-teal-300 focus:outline-none focus:ring focus:ring-opacity-40"
+            placeholder="Search..."
+            onChange={(e) => handleSearchChange(e.target.value)}
+          />
           <select
             id="category"
             onChange={handleCategoryChange}
             value={selectedCategory}
-            className="bg-teal-200 border border-teal-500 text-teal-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5"
+            className="bg-teal-200 border w-40 border-teal-500 text-teal-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block p-2.5"
           >
             <option defaultValue>all</option>
             <option defaultValue="US">electronics</option>
@@ -73,18 +83,6 @@ const Header = () => {
             <option defaultValue="FR">men's clothing</option>
             <option defaultValue="DE">women's clothing</option>
           </select>
-          <input
-            type="search"
-            className="block w-full px-4 py-2 text-teal-700 bg-white border rounded-md focus:border-teal-400 focus:ring-teal-300 focus:outline-none focus:ring focus:ring-opacity-40"
-            placeholder="Search..."
-            onChange={(event) => handleSearchChange(event)}
-          />
-          <button
-            type="submit"
-            className="px-4 text-white bg-teal-600 border-l rounded"
-          >
-            Search
-          </button>
         </form>
         <div className="flex">
           <button
@@ -103,7 +101,10 @@ const Header = () => {
               <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
             </svg>
             <span className="absolute inset-0 object-right-top -mr-6">
-              <div className="inline-flex items-center px-1.5 py-0.5 border-2 border-white rounded-full text-xs font-semibold leading-4 bg-teal-500 text-white">
+              <div
+                onClick={navigateToCart}
+                className="inline-flex items-center px-1.5 py-0.5 border-2 border-white rounded-full text-xs font-semibold leading-4 bg-teal-500 text-white"
+              >
                 {cartCount}
               </div>
             </span>
