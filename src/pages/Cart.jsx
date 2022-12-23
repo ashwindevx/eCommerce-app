@@ -1,10 +1,21 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeFromCart } from "../features/cart-slice";
 import { getSubTotal } from "../utils";
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart?.value);
+  const dispatch = useDispatch();
 
   const subtotal = getSubTotal(cart)?.toFixed(2);
+
+  const updateQuantity = (e, { product, quantity }) => {
+    const updatedQuantity = Number(e.target.value);
+    if (updatedQuantity < quantity) {
+      dispatch(removeFromCart({ product }));
+    } else {
+      dispatch(addToCart({ product }));
+    }
+  };
 
   return (
     <div className="max-w-7xl px-4 mx-auto mt-20 pb-20">
@@ -28,7 +39,7 @@ const Cart = () => {
               className="flex justify-between pl-4 pr-10 py-20 border-gray-100 border-b-2 last:border-0"
             >
               <div className="flex w-3/4">
-                <div class="h-52 w-52 flex-shrink-0 overflow-hidden">
+                <div className="h-52 w-52 flex-shrink-0 overflow-hidden">
                   <img
                     src={image}
                     className="h-full w-full object-contain p-4"
@@ -41,28 +52,17 @@ const Cart = () => {
                       {description}
                     </p>
                   </div>
-                  <div className="flex">
-                    <select
-                      id="quantity"
-                      // onChange={handleCategoryChange}
-                      // value={selectedCategory}
-                      className="bg-teal-200 mr-4 border w-16 border-teal-500 text-black text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block p-2"
-                    >
-                      <option defaultValue>1</option>
-                      <option defaultValue="two">2</option>
-                      <option defaultValue="three">3</option>
-                      <option defaultValue="four">4</option>
-                      <option defaultValue="five">5</option>
-                      <option defaultValue="six">6</option>
-                      <option defaultValue="seven">7</option>
-                      <option defaultValue="eight">8</option>
-                      <option defaultValue="nine">9</option>
-                      <option defaultValue="ten">10</option>
-                    </select>
-                    <button className="py-2 px-4 border-2 border-gray-100 rounded-xl">
-                      Delete
-                    </button>
-                  </div>
+                  <form className="flex">
+                    <input
+                      type="number"
+                      id={`${id}-product-id`}
+                      name="quantity"
+                      value={quantity}
+                      min="0"
+                      max="10"
+                      onChange={(e) => updateQuantity(e, { product, quantity })}
+                    />
+                  </form>
                 </div>
               </div>
               <p className="text-xl font-bold">${price}</p>
