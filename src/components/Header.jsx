@@ -1,12 +1,29 @@
 import React, { useState, useEffect } from "react";
+import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { FiUser } from "react-icons/fi";
 
 import { getItemCount } from "../utils";
 import { fetchAllCategories } from "../features/categories-slice";
+import { auth } from "../firebase/firebase";
 
 const Header = () => {
+  const provider = new GoogleAuthProvider();
+  const [user] = useAuthState(auth);
+
+  const handleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);
+  };
+
   const cartItems = useSelector((state) => state.cart?.value);
   const cartCount = getItemCount(cartItems);
 
@@ -16,10 +33,8 @@ const Header = () => {
   const categories = useSelector((state) => state.categories?.value);
   const dispatch = useDispatch();
   const category = searchParams.get("category"); // getting category from url param
-  // const searchTerm = searchParams.get("searchterm");
 
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [searchText, setSearchText] = useState("");
 
   // set default category to "all" if no category is selected
   useEffect(() => {
@@ -109,9 +124,15 @@ const Header = () => {
               </div>
             </span>
           </button>
-          <button className="mx-4">
-            <FiUser className="text-xl" />
-          </button>
+          {!user ? (
+            <button className="mx-4" onClick={handleLogin}>
+              Login
+            </button>
+          ) : (
+            <button className="mx-4" onClick={handleLogout}>
+              Logout
+            </button>
+          )}
         </div>
       </div>
     </div>

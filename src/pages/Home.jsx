@@ -35,7 +35,10 @@ function Home() {
       )
     : filteredProducts;
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="text-center mt-20 text-2xl font-bold">Loading...</div>
+    );
 
   return (
     <div className="max-w-7xl px-4 mx-auto">
