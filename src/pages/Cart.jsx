@@ -90,6 +90,7 @@ const Cart = () => {
                       min="0"
                       max="10"
                       onChange={(e) => updateQuantity(e, { product, quantity })}
+                      className="py-1 px-2 border-2 border-teal-400 rounded-full"
                     />
                   </form>
                 </div>

@@ -52,7 +52,6 @@ const Header = () => {
   };
 
   function handleSearchChange(searchText) {
-    console.log(searchText);
     if (searchText) {
       navigate(
         selectedCategory === "all"
