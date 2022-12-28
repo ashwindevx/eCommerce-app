@@ -5,7 +5,7 @@ import Header from "./Header";
 function Layout() {
   return (
     <>
-      <div className="h-full bg-teal-50">
+      <div className="h-full">
         <Header />
         <main>
           <Outlet />
